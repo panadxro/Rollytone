@@ -12,26 +12,10 @@ export default {
   },
   methods: {
     addFav() {
-      this.$emit('agregar', { id: this.id });
-    },
-    //guardar en db 00:14hs sofia
-    async saveFavToDB(fav) {
-      const favorito = {
-        _id: new Date().toISOString(),
-        id: fav.id
-      };
-      try {
-        const res = await addFav(favorito);
-        console.log('Resultado de guardar favorito:', res);
-      } catch (error) {
-        console.error('Error al guardar favorito en el componente', error);
-      }
+      this.$emit('agregar', this.id);
     }
-  },
-  created() {
-    this.$on('agregar', this.saveFavToDB);
-  }
-};
+    }
+}
 </script>
 
 <template>

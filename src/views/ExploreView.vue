@@ -19,12 +19,25 @@ export default {
     };
   },
   created() {
-    this.explore();
+    console.log('explore')
+    this.loadExploreAlbums();
   },
   methods: {
+    async loadExploreAlbums() {
+      // Intentar obtener los datos desde localStorage
+      const storedAlbums = localStorage.getItem('exploreAlbums');
+      if (storedAlbums) {
+        this.exploreAlbums = JSON.parse(storedAlbums);
+        // console.log(this.exploreAlbums);
+        console.log('Cargando datos de localStorage');
+      } else {
+        console.log('Haciendo nueva petición a la API');
+        await this.explore(); // Si no hay datos almacenados, hacer la petición a la API
+      }
+    },
     async explore() {
       const letraRandom = String.fromCharCode(97 + Math.floor(Math.random() * 26));
-      // const url = `https://spotify23.p.rapidapi.com/search/?q=${letraRandom}&type=album&offset=0&limit=10`;
+      const url = `https://spotify23.p.rapidapi.com/search/?q=${letraRandom}&type=album&offset=0&limit=10`;
       const options = {
         method: 'GET',
         headers: {
@@ -36,6 +49,7 @@ export default {
       try {
         const response = await fetch(url, options);
         const result = await response.json();
+        console.log(result);
         
         if (result.albums && result.albums.items.length > 0) {
             this.exploreAlbums = result.albums.items.map(item => ({
@@ -45,12 +59,19 @@ export default {
                 year: item.data.date.year,
                 cover: item.data.coverArt.sources[0].url
             }));
+
+            localStorage.setItem('exploreAlbums', JSON.stringify(this.exploreAlbums));
         } else {
             this.error = 'No se encontraron álbumes.';
         }
       } catch (error) {
-          this.error = 'Ocurrió un error al buscar los álbumes.';
+        console.error('Error al buscar álbumes:', error);
+        this.error = 'Ocurrió un error al buscar los álbumes.';
       }
+    },
+    async onAgregar(id) {
+      console.log('onAgregar')
+      await this.agregarFavorito(id);
     }
   },
   components: {
@@ -72,7 +93,7 @@ export default {
         :anio="album.year"
         :portada="album.cover"
         :es-favorito="isFav(album.id)"
-        @agregar="agregarFavorito(album.id)"
+        @agregar="onAgregar(album.id)"
       ></albums>
     </div>
   </div>

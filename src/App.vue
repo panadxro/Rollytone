@@ -5,12 +5,16 @@ import { RouterLink, RouterView } from 'vue-router'
 
 <script>
 import Favs from './components/Favs.vue';
+import ExploreView from './views/ExploreView.vue';
+import SearchView from './views/SearchView.vue';
 
 export default {
   data() {
     return {
       favs: [],
       albums: [],
+      exploreAlbums: [],
+      error: ''
     };
   },
   created() {
@@ -27,25 +31,35 @@ export default {
     isFav(albumId) {
       return this.favs.some(album => album.id === albumId);
     },
-    agregarFavorito(id) {
-    // Verifica que this.albums esté definido y no sea vacío
-      if (this.albums && this.albums.length > 0) {
-        const albumIndex = this.albums.findIndex(item => item.id === id);
+    async agregarFavorito(id) {
+      console.log('intentando agregar a favs')
+      const albumIndex = this.favs.findIndex(item => item.id === id);
       
-        if (albumIndex > -1) {
-          this.favs.splice(albumIndex, 1);
-        } else {
-          let album = this.albums.find(item => item.id === id);
-          // Otro código para agregar el álbum a favs si no se encuentra en la lista
-        }
-        this.guardarFavs();
+      if (albumIndex > -1) {
+        this.favs.splice(albumIndex, 1);
       } else {
-        console.error('No se han cargado los datos de álbumes correctamente.');
+        // Buscar en this.albums y this.exploreAlbums según sea necesario
+        let album = this.albums.find(item => item.id === id);
+        if (!album) {
+        album = this.exploreAlbums.find(item => item.id === id);
+        }
+        
+        if (album) {
+          this.favs.push(album);
+        } else {
+          console.error('El álbum no se encontró en ninguna lista.');
+        }
       }
+      
+      // Guardar los favoritos actualizados en localStorage
+      this.guardarFavs();
+      console.log('Después de agregar/quitar a favs:', this.favs);
     },
   },
   components: {
-    'favs': Favs
+    Favs,
+    ExploreView,
+    SearchView,
   }
 };
 </script>
@@ -93,7 +107,13 @@ export default {
     </aside>
     
     <main class="[grid-area:main] rounded-lg bg-zinc-900 overflow-y-auto pb-6">
-      <router-view :isFav="isFav" :agregarFavorito="agregarFavorito" />
+      <router-view
+        :albums="albums"
+        :exploreAlbums="exploreAlbums"
+        :favs="favs"
+        :isFav="isFav"
+        :agregarFavorito="agregarFavorito"
+      ></router-view>
     </main>
     
     <footer class="[grid-area:player] min-h-[25px] text-white text-center">

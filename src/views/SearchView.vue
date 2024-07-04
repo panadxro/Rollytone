@@ -18,7 +18,7 @@ export default {
       this.error = '';
       this.albums = [];
 
-      // const url = `https://spotify23.p.rapidapi.com/search/?q=${encodeURIComponent(this.busqueda)}&type=album&offset=0&limit=10`;
+      const url = `https://spotify23.p.rapidapi.com/search/?q=${encodeURIComponent(this.busqueda)}&type=album&offset=0&limit=10`;
       const options = {
         method: 'GET',
         headers: {
@@ -44,13 +44,16 @@ export default {
         }
       } catch (error) {
         this.error = 'Ocurrió un error al buscar los álbumes.';
+        console.error('Error en la solicitud fetch:', error);
       }
     },
     isFav(albumId) {
-      return this.$root.isFav(albumId);
+      //return this.$root.isFav(albumId);
+      return this.$parent.isFav(albumId);
     },
     agregarFavorito(id) {
-      this.$root.agregarFavorito(id);
+      //this.$root.agregarFavorito(id);
+      this.$parent.agregarFavorito(id);
     }
   },
   components: {

@@ -4,7 +4,8 @@ export const useLoading = defineStore('isloading', {
   state: () => {
     return {
       loading: {
-        albums: false
+        albums: false,
+        albumDetail: false
       }
     }
   },

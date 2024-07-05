@@ -7,16 +7,21 @@ export const useAlbums = defineStore('albums',{
   state: () => {
     return {
       albums: [],
+      search: '',
       error: ''
     };
   },  
   actions: {
     async getAlbums() {
+      console.log(this.search)
       loading = useLoading();
       loading.loading.albums = false;
       this.albums = [];
 
       let url = `https://${import.meta.env.VITE_API_URL}/search/?q=rock&type=album&offset=0&limit=10`;
+      if (this.search) {
+        url = `https://${import.meta.env.VITE_API_URL}/search/?q=${this.search}&type=album&offset=0&limit=10`;
+      }
       const options = {
         method: 'GET',
         headers: {
@@ -49,6 +54,9 @@ export const useAlbums = defineStore('albums',{
       } catch (error) {
         console.error('Error al buscar álbumes:', error);
       }
+    },
+    async getAlbumDetail(id) {
+      
     }
   }
 })

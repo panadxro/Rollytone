@@ -1,5 +1,33 @@
-<script>
+<script setup>
 import Albums from '../components/Albums.vue';
+
+import { useAlbums } from '@/data/explore';
+import { onMounted } from 'vue';
+
+const albumsCatalog = useAlbums();
+
+onMounted(() => {
+  console.log('Busqueda en proceso')
+});
+</script>
+
+<template>
+  <div class="relative z-10 px-6 pt-10">
+    <form @submit.prevent="albumsCatalog.getAlbums">
+      <input class="mb-6 py-2 px-6 rounded-full w-80 bg-transparent border-2 text-white" id="buscar" type="text" v-model="search" placeholder="Ingresa el título del álbum">
+    </form>
+    <h1 class="text-xl font-bold text-white">{{ seach ? 'Resultados' : 'Buscados recientemente' }}</h1>
+    <!-- <h1 v-if="error" class="text-xl font-bold text-white">{{ error }}</h1> -->
+    <div class="flex flex-wrap mt-6 gap-4">
+      <Albums v-for="album in albumsCatalog.albums" 
+        :key="album.id" 
+        :album="album"
+      </Albums>
+    </div>
+  </div>
+</template>
+
+<!-- <script>
 
 export default {
   data() {
@@ -60,30 +88,7 @@ export default {
     'albums': Albums
   }
 };
-</script>
-
-<template>
-  <div class="relative z-10 px-6 pt-10">
-    <form @submit.prevent="searchAlbum">
-      <input class="mb-6 py-2 px-6 rounded-full w-80 bg-transparent border-2 text-white" id="buscar" type="text" v-model="busqueda" placeholder="Ingresa el título del álbum">
-    </form>
-    <h1 class="text-xl font-bold text-white">{{ busqueda ? 'Resultados' : 'Buscados recientemente' }}</h1>
-    <h1 v-if="error" class="text-xl font-bold text-white">{{ error }}</h1>
-    <div class="flex flex-wrap mt-6 gap-4">
-      <albums 
-        v-for="album in albums"
-        :key="album.id"
-        :id="album.id"
-        :titulo="album.title"
-        :artista="album.artist"
-        :anio="album.year"
-        :portada="album.cover"
-        :es-favorito="isFav(album.id)"
-        @agregar="agregarFavorito(album.id)"
-      ></albums>
-    </div>
-  </div>
-</template>
+</script> -->
 
 <style>
 @media (min-width: 1024px) {

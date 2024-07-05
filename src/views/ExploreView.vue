@@ -20,12 +20,10 @@ onMounted(() => {
 <!--       <div v-if="loading.loading.albums" class="w-full">
         LOADING
       </div> -->
-      <template>
-        <Albums v-for="album in albumsCatalog.albums" 
-          :key="album.id" 
-          :album="album"
-        </Albums>
-      </template>
+      <Albums v-for="album in albumsCatalog.albums" 
+        :key="album.id" 
+        :album="album"
+      </Albums>
 <!--       <albums
         v-for="album in exploreAlbums"
         :key="album.id"

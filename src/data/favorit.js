@@ -33,7 +33,7 @@ export const useFavoritStore = defineStore("favorit", {
     },
   },
 }); */
-
+const favs: [];
 
 const API_URL = "https://www.omdbapi.com/";
 const API_KEY = "f9bfc5b4";

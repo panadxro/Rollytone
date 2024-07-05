@@ -55,15 +55,15 @@ export const useAlbums = defineStore('albums',{
         console.error('Error al buscar álbumes:', error);
       }
     },
-    async getAlbumDetail(id) {
+    async getAlbumDetail(uri) {
+      let id = uri.replace('spotify:album:', '');
+      console.log(id);
       loading = useLoading();
       loading.loading.albumDetail = false;
+
+      let url = `https://${import.meta.env.VITE_API_URL}/albums/?ids=${id}`;
       try{
-        const response = await fetch(
-          `${import.meta.env.VITE_API_URL}albums/${id}?api_key=${
-            import.meta.env.VITE_API_KEY
-          }`
-        );
+        const response = await fetch(url);
         const data = response.json();
         this.albumDetail = {
           id: data.id,

@@ -1,11 +1,16 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
+import { ref } from 'vue';
+import { onMounted } from 'vue';
+
+import { useAlbums } from '@/data/explore';
+
+const albumsCatalog = useAlbums();
 
 </script>
 
-<script>
+<!-- <script>
 import Favs from './components/Favs.vue';
-import ExploreView from './views/ExploreView.vue';
 import SearchView from './views/SearchView.vue';
 
 export default {
@@ -62,7 +67,7 @@ export default {
     SearchView,
   }
 };
-</script>
+</script> -->
 
 
 <template>
@@ -90,7 +95,7 @@ export default {
             <i class="fa-solid fa-bookmark"></i><span class="hidden sm:inline">Mis favoritos</span>
           </h2>
           <div class="lista-carrito overflow-y-auto pb-6">
-            <favs 
+<!--             <favs 
               v-for="(album, index) in favs"
               :key="album.id"
               :id="album.id"
@@ -100,20 +105,14 @@ export default {
               :portada="album.cover"
               :es-favorito="isFav(album.id)"
               @agregar="agregarFavorito(album.id)"
-            ></favs>
+            ></favs> -->
           </div>
         </div>
       </nav>
     </aside>
     
     <main class="[grid-area:main] rounded-lg bg-zinc-900 overflow-y-auto pb-6">
-      <router-view
-        :albums="albums"
-        :exploreAlbums="exploreAlbums"
-        :favs="favs"
-        :isFav="isFav"
-        :agregarFavorito="agregarFavorito"
-      ></router-view>
+      <router-view></router-view>
     </main>
     
     <footer class="[grid-area:player] min-h-[25px] text-white text-center">

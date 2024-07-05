@@ -1,6 +1,47 @@
-<script>
+<script setup>
 import Albums from '../components/Albums.vue';
 
+import { useLoading } from '@/data/loading';
+import { useAlbums } from '@/data/explore';
+import { onMounted } from 'vue';
+
+const loading = useLoading();
+const albumsCatalog = useAlbums();
+
+onMounted(() => {
+  albumsCatalog.getAlbums();
+});
+</script>
+
+<template>
+  <div>
+    <h1 class="text-xl font-bold text-white">Explorar</h1>
+    <div class="flex flex-wrap mt-6 gap-4">
+<!--       <div v-if="loading.loading.albums" class="w-full">
+        LOADING
+      </div> -->
+      <template>
+        <Albums v-for="album in albumsCatalog.albums" 
+          :key="album.id" 
+          :album="album"
+        </Albums>
+      </template>
+<!--       <albums
+        v-for="album in exploreAlbums"
+        :key="album.id"
+        :id="album.id"
+        :titulo="album.title"
+        :artista="album.artist"
+        :anio="album.year"
+        :portada="album.cover"
+        :es-favorito="isFav(album.id)"
+        @agregar="onAgregar(album.id)"
+      ></albums> -->
+    </div>
+  </div>
+</template>
+
+<!-- <script>
 export default {
   props: {
     isFav: {
@@ -78,23 +119,4 @@ export default {
     'albums': Albums
   }
 };
-</script>
-
-<template>
-  <div>
-    <h1 class="text-xl font-bold text-white">Explorar</h1>
-    <div class="flex flex-wrap mt-6 gap-4">
-      <albums
-        v-for="album in exploreAlbums"
-        :key="album.id"
-        :id="album.id"
-        :titulo="album.title"
-        :artista="album.artist"
-        :anio="album.year"
-        :portada="album.cover"
-        :es-favorito="isFav(album.id)"
-        @agregar="onAgregar(album.id)"
-      ></albums>
-    </div>
-  </div>
-</template>
+</script> -->

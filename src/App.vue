@@ -7,6 +7,9 @@ import { useAlbums } from '@/data/explore';
 
 const albumsCatalog = useAlbums();
 
+onMounted(() => {
+  albumsCatalog.getAlbums();
+});
 </script>
 
 <!-- <script>

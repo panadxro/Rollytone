@@ -10,7 +10,7 @@ const albumsCatalog = useAlbums();
 
 onMounted(() => {
   albumsCatalog.search = null;
-  albumsCatalog.getAlbums();
+  // albumsCatalog.getAlbums();
 });
 </script>
 

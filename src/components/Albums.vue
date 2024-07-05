@@ -29,6 +29,7 @@ import { addFav } from './data/db.js';
 </script> */ -->
 
 <template>
+  <RouterLink :to="`/album/${props.album.id}`">
   <article class="group relative">
     <div class="absolute left-28 top-2 translate-y-20 transition-all duration-500 opacity-0 group-hover:translate-y-28 group-hover:opacity-100 z-10 bg-zinc-800 rounded-full aspect-square">
       <!-- <button @click="addFav" type="button" class="card-play-button text-xs font-bold text-white p-4">
@@ -45,4 +46,5 @@ import { addFav } from './data/db.js';
       </div>
     </a>
   </article>
+</RouterLink>
 </template>

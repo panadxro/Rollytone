@@ -39,17 +39,15 @@ export const useAlbums = defineStore('albums',{
         loading.loading.albums = true;
         
         if (result.albums && result.albums.items.length > 0) {
-          this.albums = result.albums.items.map(item => ({
-            id: item.data.uri,
-            title: item.data.name,
-            artist: item.data.artists.items[0].profile.name,
-            year: item.data.date.year,
-            cover: item.data.coverArt.sources[0].url
-          }));
+            this.albums = result.albums.items.map(item => ({
+              id: item.data.uri,
+              title: item.data.name,
+              artist: item.data.artists.items[0].profile.name,
+              year: item.data.date.year,
+              cover: item.data.coverArt.sources[0].url
+            }));
 
-          console.log(this.albums);
-          this.search = '';
-          localStorage.setItem('exploreAlbums', JSON.stringify(this.exploreAlbums));
+            console.log(this.albums);
         } else {
             this.error = 'No se encontraron álbumes.';
         }
@@ -58,7 +56,27 @@ export const useAlbums = defineStore('albums',{
       }
     },
     async getAlbumDetail(id) {
-      
+      loading = useLoading();
+      loading.loading.albumDetail = false;
+      try{
+        const response = await fetch(
+          `${import.meta.env.VITE_API_URL}albums/${id}?api_key=${
+            import.meta.env.VITE_API_KEY
+          }`
+        );
+        const data = response.json();
+        this.albumDetail = {
+          id: data.id,
+          title: data.name,
+          artist: data.artists.items[0].profile.name,
+          year: data.release_date,
+          cover: data.images.length > 0 ? data.images[1].url : (data.images.length > 0 ? data.images[0].url : '')
+        };
+        loading.loading.albumDetail = true;
+      } catch (error) {
+        console.error('Error al obtener el detalle del album', error);
+      }
+
     }
   }
 })

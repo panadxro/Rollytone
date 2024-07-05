@@ -7,7 +7,8 @@ export const useAlbums = defineStore('albums',{
   state: () => {
     return {
       albums: [],
-      
+      favs: [],
+      albumDetail: {},
       search: '',
       error: ''
     };
@@ -55,20 +56,27 @@ export const useAlbums = defineStore('albums',{
         console.error('Error al buscar álbumes:', error);
       }
     },
-    async getAlbumDetail(uri) {
-      let id = uri.replace('spotify:album:', '');
+    async getAlbumDetail(id) {
       console.log(id);
       loading = useLoading();
       loading.loading.albumDetail = false;
 
       let url = `https://${import.meta.env.VITE_API_URL}/albums/?ids=${id}`;
+      const options = {
+        method: 'GET',
+        headers: {
+          'X-RapidAPI-Key': `${import.meta.env.VITE_API_KEY}`,
+          'X-RapidAPI-Host': `${import.meta.env.VITE_API_URL}`
+        }
+      };
       try{
-        const response = await fetch(url);
-        const data = response.json();
+        const response = await fetch(url, options);
+        const data = await response.json();
+        console.log(data)
         this.albumDetail = {
           id: data.id,
           title: data.name,
-          artist: data.artists.items[0].profile.name,
+          artist: data.artists[0].name,
           year: data.release_date,
           cover: data.images.length > 0 ? data.images[1].url : (data.images.length > 0 ? data.images[0].url : '')
         };
@@ -77,6 +85,26 @@ export const useAlbums = defineStore('albums',{
         console.error('Error al obtener el detalle del album', error);
       }
 
-    }
+    },
+    async agregarFavorito(id) {
+      console.log('intentando agregar a favs')
+      const albumIndex = this.favs.findIndex(item => item.id === id);
+      
+      if (albumIndex > -1) {
+        this.favs.splice(albumIndex, 1);
+      } else {
+        // Buscar en this.albums y this.exploreAlbums según sea necesario
+        let album = this.albums.find(item => item.id === id);
+        if (!album) {
+        album = this.exploreAlbums.find(item => item.id === id);
+        }
+        
+        if (album) {
+          this.favs.push(album);
+          console.log(this.favs)
+        } else {
+          console.error('El álbum no se encontró en ninguna lista.');
+        }
+      }}
   }
 })

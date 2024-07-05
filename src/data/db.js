@@ -14,4 +14,4 @@ const addFav = async (favorito) => {
 };
 
 
-export { addFav };
+export default addFav ;

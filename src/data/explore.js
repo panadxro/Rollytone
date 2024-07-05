@@ -16,7 +16,7 @@ export const useAlbums = defineStore('albums',{
       loading.loading.albums = false;
       this.albums = [];
 
-      let url = `https://api.spotify.com/v1/browse/new-releases`;
+      let url = `https://${import.meta.env.VITE_API_URL}/search/?q=rock&type=album&offset=0&limit=10`;
       const options = {
         method: 'GET',
         headers: {
@@ -39,6 +39,7 @@ export const useAlbums = defineStore('albums',{
               year: item.data.date.year,
               cover: item.data.coverArt.sources[0].url
             }));
+
             console.log(this.albums);
 
             localStorage.setItem('exploreAlbums', JSON.stringify(this.exploreAlbums));

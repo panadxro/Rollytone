@@ -1,10 +1,17 @@
 <script setup>
 import Albums from '../components/Albums.vue';
 
+import { ref } from 'vue';
 import { useAlbums } from '@/data/explore';
 import { onMounted } from 'vue';
 
 const albumsCatalog = useAlbums();
+const search = ref('');
+
+const handleSearch = () => {
+  albumsCatalog.search = search.value;
+  albumsCatalog.getAlbums();
+};
 
 onMounted(() => {
   console.log('Busqueda en proceso')
@@ -13,10 +20,10 @@ onMounted(() => {
 
 <template>
   <div class="relative z-10 px-6 pt-10">
-    <form @submit.prevent="albumsCatalog.getAlbums">
+    <form @submit.prevent="handleSearch">
       <input class="mb-6 py-2 px-6 rounded-full w-80 bg-transparent border-2 text-white" id="buscar" type="text" v-model="search" placeholder="Ingresa el título del álbum">
     </form>
-    <h1 class="text-xl font-bold text-white">{{ seach ? 'Resultados' : 'Buscados recientemente' }}</h1>
+    <h1 class="text-xl font-bold text-white">{{ albumsCatalog.search ? 'Resultados' : 'Buscados recientemente' }}</h1>
     <!-- <h1 v-if="error" class="text-xl font-bold text-white">{{ error }}</h1> -->
     <div class="flex flex-wrap mt-6 gap-4">
       <Albums v-for="album in albumsCatalog.albums" 

@@ -9,6 +9,7 @@ const loading = useLoading();
 const albumsCatalog = useAlbums();
 
 onMounted(() => {
+  albumsCatalog.search = null;
   albumsCatalog.getAlbums();
 });
 </script>

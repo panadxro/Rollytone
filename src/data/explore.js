@@ -7,6 +7,7 @@ export const useAlbums = defineStore('albums',{
   state: () => {
     return {
       albums: [],
+      
       search: '',
       error: ''
     };
@@ -31,23 +32,24 @@ export const useAlbums = defineStore('albums',{
       };
 
       try {
+        console.log(url)
         const response = await fetch(url, options);
         const result = await response.json();
         this.albums = result.albums;
         loading.loading.albums = true;
         
         if (result.albums && result.albums.items.length > 0) {
-            this.albums = result.albums.items.map(item => ({
-              id: item.data.uri,
-              title: item.data.name,
-              artist: item.data.artists.items[0].profile.name,
-              year: item.data.date.year,
-              cover: item.data.coverArt.sources[0].url
-            }));
+          this.albums = result.albums.items.map(item => ({
+            id: item.data.uri,
+            title: item.data.name,
+            artist: item.data.artists.items[0].profile.name,
+            year: item.data.date.year,
+            cover: item.data.coverArt.sources[0].url
+          }));
 
-            console.log(this.albums);
-
-            localStorage.setItem('exploreAlbums', JSON.stringify(this.exploreAlbums));
+          console.log(this.albums);
+          this.search = '';
+          localStorage.setItem('exploreAlbums', JSON.stringify(this.exploreAlbums));
         } else {
             this.error = 'No se encontraron álbumes.';
         }

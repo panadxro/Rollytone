@@ -7,23 +7,30 @@ export const useAlbums = defineStore('albums',{
   state: () => {
     return {
       albums: [],
-      favs: [],
+      favs: JSON.parse(localStorage.getItem("favs")) ?? [],
       albumDetail: {},
       search: '',
-      error: ''
+      error: '',
+      filter: ''
+
     };
   },  
   actions: {
     async getAlbums() {
-      console.log(this.search)
       loading = useLoading();
       loading.loading.albums = false;
       this.albums = [];
 
       let url = `https://${import.meta.env.VITE_API_URL}/search/?q=rock&type=album&offset=0&limit=10`;
       if (this.search) {
+        /* url = `https://spotify23.p.rapidapi.com/genre_view/?id=0JQ5DAqbMKFEC4WFtoNRpw&content_limit=10&limit=10`; */
         url = `https://${import.meta.env.VITE_API_URL}/search/?q=${this.search}&type=album&offset=0&limit=10`;
       }
+/*       if (this.filter) {
+        url = `https://${import.meta.env.VITE_API_URL}/search/?q=${this.filter}&type=album&offset=0&limit=10`;
+      } */
+
+
       const options = {
         method: 'GET',
         headers: {
@@ -33,7 +40,6 @@ export const useAlbums = defineStore('albums',{
       };
 
       try {
-        console.log(url)
         const response = await fetch(url, options);
         const result = await response.json();
         this.albums = result.albums;
@@ -47,8 +53,7 @@ export const useAlbums = defineStore('albums',{
               year: item.data.date.year,
               cover: item.data.coverArt.sources[0].url
             }));
-
-            console.log(this.albums);
+            // console.log(this.albums)
         } else {
             this.error = 'No se encontraron álbumes.';
         }
@@ -71,15 +76,15 @@ export const useAlbums = defineStore('albums',{
       };
       try{
         const response = await fetch(url, options);
-        const data = await response.json();
-        console.log(data)
-        this.albumDetail = {
-          id: data.id,
-          title: data.name,
-          artist: data.artists[0].name,
-          year: data.release_date,
-          cover: data.images.length > 0 ? data.images[1].url : (data.images.length > 0 ? data.images[0].url : '')
-        };
+        const result = await response.json();
+        this.albumDetail = result.albums.map(item => ({
+          id: item.uri,
+          title: item.name,
+          artist: item.artists[0].name,
+          year: new Date(item.release_date).getFullYear(),
+          cover: item.images[0].url
+        }));
+        // console.log(this.albumDetail)
         loading.loading.albumDetail = true;
       } catch (error) {
         console.error('Error al obtener el detalle del album', error);
@@ -87,11 +92,12 @@ export const useAlbums = defineStore('albums',{
 
     },
     async agregarFavorito(id) {
-      console.log('intentando agregar a favs')
       const albumIndex = this.favs.findIndex(item => item.id === id);
       
       if (albumIndex > -1) {
         this.favs.splice(albumIndex, 1);
+        localStorage.setItem("favs", JSON.stringify(this.favs));
+        // console.log('Album eliminado de favoritos')
       } else {
         // Buscar en this.albums y this.exploreAlbums según sea necesario
         let album = this.albums.find(item => item.id === id);
@@ -101,7 +107,8 @@ export const useAlbums = defineStore('albums',{
         
         if (album) {
           this.favs.push(album);
-          console.log(this.favs)
+          localStorage.setItem("favs", JSON.stringify(this.favs));
+          // console.log(`Album agregado a favoritos`)
         } else {
           console.error('El álbum no se encontró en ninguna lista.');
         }

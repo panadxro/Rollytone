@@ -15,9 +15,9 @@ onMounted(() => {
 </script>
 
 <template>
-  <div>
+  <div class="relative z-10 px-6 pt-10">
     <h1 class="text-xl font-bold text-white">Explorar</h1>
-    <div class="flex flex-wrap mt-6 gap-4">
+    <div class="flex flex-wrap mt-6 gap-4 albumes">
 <!--       <div v-if="loading.loading.albums" class="w-full">
         LOADING
       </div> -->
@@ -25,21 +25,13 @@ onMounted(() => {
         :key="album.id" 
         :album="album"
       </Albums>
-<!--       <albums
-        v-for="album in exploreAlbums"
-        :key="album.id"
-        :id="album.id"
-        :titulo="album.title"
-        :artista="album.artist"
-        :anio="album.year"
-        :portada="album.cover"
-        :es-favorito="isFav(album.id)"
-        @agregar="onAgregar(album.id)"
-      ></albums> -->
     </div>
   </div>
 </template>
 
+<style>
+
+</style>
 <!-- <script>
 export default {
   props: {

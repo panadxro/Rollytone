@@ -1,6 +1,9 @@
 <script setup>
 import { computed } from 'vue';
 import { RouterLink } from 'vue-router';
+import { useAlbums } from '@/data/explore';
+
+const albumsCatalog = useAlbums();
 
 const props = defineProps({
   album: {
@@ -15,8 +18,9 @@ const props = defineProps({
 <template>
   <article class="group relative">
     <div class="absolute left-28 top-2 translate-y-20 transition-all duration-500 opacity-0 group-hover:translate-y-28 group-hover:opacity-100 z-10 bg-zinc-800 rounded-full aspect-square">
-      <button @click="addFav" type="button" class="card-play-button text-xs font-bold text-white p-4">
-        <!-- <i :class="esFavorito ? 'fa-solid' : 'fa-regular'" class="fa-heart"></i> -->
+      <button @click="albumsCatalog.agregarFavorito(album?.id)" type="button" class="card-play-button text-xs font-bold text-white p-4">
+        agregar
+        <i :class="esFavorito ? 'fa-solid' : 'fa-regular'" class="fa-heart"></i>
       </button>
     </div>
     <a class="playlist-item transition-all duration-300 flex relative p-2 overflow-hidden gap-2 pb-6 rounded-md hover:bg-zinc-800 shadow-lg hover:shadow-lg w-40 flex-col">
@@ -34,10 +38,9 @@ const props = defineProps({
 </template>
 
 <script>
-import { addFav } from '../data/db.js';
-
  export default {
   props: {
+    
     id: String,
     titulo: String,
     artista: String,
@@ -49,7 +52,7 @@ import { addFav } from '../data/db.js';
     addFav() {
       this.$emit('agregar', this.id);
     }
-    }
+  }
 }
 </script>
 

@@ -7,7 +7,7 @@ const vistosdb = new PouchDB('vistosDB')
 export const useDBs = defineStore('dbs',{
     state: () => {
         return {
-            favs: ref(null),
+            favs: ref([]),
             vistos: []
         };
       },  
@@ -28,14 +28,20 @@ export const useDBs = defineStore('dbs',{
                 console.log(error)
             }
         },
-/*         async showData(tipo) {
+        async showData(tipo) {
             const type = tipo === 'favs' ? favsdb : vistosdb;
-            try {
-                const data = await type.allDocs({include_docs: true})
-                this.favs = data.rows.map(row => row.doc)
-            } catch {
-                console.log(error)
-            }
-        } */
+            type.allDocs({include_docs: true}).then(data => {
+                this[tipo] = data.rows.map(row => row.doc)
+            })
+        },
+        setUpListeners(tipo) {
+            const type = tipo === 'favs' ? favsdb : vistosdb;
+            type.changes({
+                since: 'now',
+                live: true
+              }).on('change', () => {
+                this.showData(tipo);
+              });
+        }
     }
 });

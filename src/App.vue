@@ -4,16 +4,17 @@ import { ref } from 'vue';
 import { onMounted } from 'vue';
 
 import { useAlbums } from '@/data/explore';
-// import { useDBs } from '@/data/db';
+import { useDBs } from '@/data/db';
 
 import Favs from './components/Favs.vue';
 
-// const database = useDBs();
+const database = useDBs();
 const albumsCatalog = useAlbums();
 
 onMounted(() => {
   albumsCatalog.getAlbums('explore');
-  // albumsCatalog.leerFavoritosLocal();
+  database.showData('favs');
+  database.setUpListeners('favs');
 });
 </script>
 
@@ -43,7 +44,7 @@ onMounted(() => {
           </h2>
           <div class="overflow-hidden mb-6">
             <div class="lista-carrito">
-              <Favs v-for="(album, index) in albumsCatalog.favs" :key="album.id" :favs="album"></Favs>
+              <Favs v-for="(album, index) in database.favs" :key="album._id" :favs="album"></Favs>
             </div>
           </div>
         </div>

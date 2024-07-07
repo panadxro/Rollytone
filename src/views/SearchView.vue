@@ -131,8 +131,7 @@ export default {
   }
   .albumes{
     display: flex;
-    justify-content: center;
+    justify-content: start;
   }
 }
-
 </style>

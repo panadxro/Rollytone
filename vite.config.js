@@ -57,6 +57,17 @@ export default defineConfig({
             },
           },
           {
+            urlPattern: ({ url }) => url.hostname === 'api.spotify.com',
+            handler: 'NetworkFirst',
+            options: {
+              cacheName: 'spotify-api-cache',
+              networkTimeoutSeconds: 10,
+              cacheableResponse: {
+                statuses: [0, 200],
+              },
+            },
+          },
+          {
             urlPattern: /\.(?:png|jpg|jpeg|svg|ico)$/,
             handler: 'CacheFirst',
             options: {

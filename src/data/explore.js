@@ -37,6 +37,7 @@ export const useAlbums = defineStore('albums',{
       }
     },
     async getAlbums(catalog) {
+      database = useDBs();
       loading = useLoading();
       loading.loading.albums = false;
       // this.albums = [];
@@ -65,9 +66,9 @@ export const useAlbums = defineStore('albums',{
               artist: item.data.artists.items[0].profile.name,
               year: item.data.date.year,
               cover: item.data.coverArt.sources[0].url,
-              esFavorito: this.isFavorite(item.data.uri)
+              esFavorito: database.favs.some(album => album.id === item.data.uri),
             }));
-            // console.log(this.albums)
+            console.log(loadAlbums)
             if(catalog === 'busqueda') {
               this.albumsSearch = loadAlbums;
             } else if (catalog === 'explore') {
@@ -105,14 +106,14 @@ export const useAlbums = defineStore('albums',{
           artist: item.artists[0].name,
           year: new Date(item.release_date).getFullYear(),
           cover: item.images[0].url,
-          esFavorito: this.isFavorite(item.uri),
+          esFavorito: database.favs.some(album => album.id === item.uri),
           tracks: item.tracks.items.map(track => ({
             id: track.id,
             name: track.name,
             duration: track.duration_ms
           })),
         }));
-        // console.log(this.albumDetail)
+        console.log(this.albumDetail)
         this.vistosRecientemente.push(this.albumDetail[0])
         localStorage.setItem("vistosRecientemente", JSON.stringify(this.vistosRecientemente));
         database.addData(this.albumDetail[0], 'visto')
@@ -121,7 +122,6 @@ export const useAlbums = defineStore('albums',{
       } catch (error) {
         console.error('Error al obtener el detalle del album', error);
       }
-
     },
     async buttonFav(id) {
       database = useDBs();
@@ -134,6 +134,7 @@ export const useAlbums = defineStore('albums',{
         album = this.albumsSearch.find(item => item.id === id);
         }
         await database.addData(album, 'favs')
+
       }
     },
 

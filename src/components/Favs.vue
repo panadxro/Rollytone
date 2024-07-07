@@ -34,3 +34,12 @@ const props = defineProps({
     </div>
   </article>
 </template>
+
+<style scoped>
+@media (max-width: 642px){
+  button{
+    color: transparent;
+  }
+}
+
+</style>

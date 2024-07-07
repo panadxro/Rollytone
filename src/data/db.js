@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
 
-import { ref } from 'vue'
+// import { ref } from 'vue'
+// const PouchDB = require('pouchdb');
 const favsdb = new PouchDB('favsDB')
 const vistosdb = new PouchDB('vistosDB')
 
@@ -20,7 +21,7 @@ export const useDBs = defineStore('dbs',{
                 artist: album.artist,
                 year: album.year,
                 cover: album.cover,
-                // isFav: album.isFav
+                isFav: album.esFavorito
             }
             const type = tipo === 'favs' ? favsdb : vistosdb;
             type.put(dato)
@@ -38,6 +39,14 @@ export const useDBs = defineStore('dbs',{
                 type.remove(doc)
             })
         },
+/*         updateButton(id, event) {
+            console.log(id, event);
+            favsdb.get(id).then(doc => {
+                doc.isFav = true;
+                favsdb.put(doc);
+            }); 
+        },
+        */
         setUpListeners(tipo) {
             const type = tipo === 'favs' ? favsdb : vistosdb;
             type.changes({

@@ -29,16 +29,15 @@ albumsCatalog.getAlbumDetail(route.params.id);
     </div> -->
     <article class="group relative flex flex-col lg:flex-row lg:items-center" v-if="albumsCatalog.albumDetail[0]">
     <div class="absolute left-28 top-2 translate-y-20 transition-all duration-500 opacity-0 group-hover:translate-y-28 group-hover:opacity-100 z-10 bg-zinc-800 rounded-full aspect-square">
-      <button @click="albumsCatalog.buttonFav(albumsCatalog.albumDetail[0].id)" type="button" class="card-play-button text-xs font-bold text-white p-4">
-        <!-- <i :class="esFavorito ? 'fa-solid' : 'fa-regular'" class="fa-heart"></i> -->
-        Agregar
+      <button @click="albumsCatalog.addFav(albumsCatalog.albumDetail[0].id)" type="button" class="card-play-button text-xs font-bold text-white p-4">
+        <i :class="esFavorito ? 'fa-solid' : 'fa-regular'" class="fa-heart fa-xl"></i>
       </button>
     </div>
     <picture class="w-full h-auto flex-none lg:w-1/3">
         <img :src="`${albumsCatalog.albumDetail[0].cover}`" :alt="`${albumsCatalog.albumDetail[0].artist} - ${albumsCatalog.albumDetail[0].year}`" class="object-cover rounded-md coverAlbum md:max-w-md mx-auto">
       </picture>
-      <div class="flex flex-col px-2 truncate nombreAlbum lg:px-6 lg:flex-wrap">
-        <h4 class="text-white font-bold lg:mb-4 lg:absolute lg:top-1/2">{{ albumsCatalog.albumDetail[0].title }}</h4>
+      <div class="flex flex-auto flex-col px-2 nombreAlbum lg:px-6">
+        <h4 class="text-white font-bold lg:mb-4 lg:absolute lg:top-1/2 lg:-translate-y-1/2">{{ albumsCatalog.albumDetail[0].title }}</h4>
         <span class="text-sm text-gray-400 lg:absolute lg:bottom-0">{{ albumsCatalog.albumDetail[0].artist }} - {{ albumsCatalog.albumDetail[0].year }}</span>
       </div>
   </article>

@@ -18,13 +18,11 @@ export const useAlbums = defineStore('albums',{
       error: ''
     };
   },  
-  getters: {
-    
-    /* favoriteORITE? */
+/*   getters: {
     isFavorite: (state) => (id) => {
       return state.favs.some(album => album.id === id);
     }
-  },
+  }, */
   actions: {
     async loadExploreAlbums() {
       // Intentar obtener los datos desde localStorage
@@ -42,7 +40,7 @@ export const useAlbums = defineStore('albums',{
       loading.loading.albums = false;
       // this.albums = [];
 
-      let url = `https://${import.meta.env.VITE_API_URL}/search/?q=rock&type=album&offset=0&limit=10`;
+      let url = `https://${import.meta.env.VITE_API_URL}/search/?q=lofi&type=album&offset=0&limit=20`;
       if (catalog === 'busqueda') {
         url = `https://${import.meta.env.VITE_API_URL}/search/?q=${this.search}&type=album&offset=0&limit=10`;
       }
@@ -134,9 +132,11 @@ export const useAlbums = defineStore('albums',{
         album = this.albumsSearch.find(item => item.id === id);
         }
         await database.addData(album, 'favs')
-
       }
     },
-
+    isFavorite(id) {
+      database = useDBs();
+      return database.favs.some(album => album.id === id);
+    }
   }
 })

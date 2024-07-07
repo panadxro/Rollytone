@@ -21,7 +21,7 @@ export const useAlbums = defineStore('albums',{
   getters: {
     
     /* favoriteORITE? */
-    isFavoriteorite: (state) => (id) => {
+    isFavorite: (state) => (id) => {
       return state.favs.some(album => album.id === id);
     }
   },
@@ -82,40 +82,6 @@ export const useAlbums = defineStore('albums',{
         console.error('Error al buscar álbumes:', error);
       }
     },
-    /* async getAlbumsSearch() {
-      this.albumsSearch = [];
-      let url = `https://${import.meta.env.VITE_API_URL}/search/?q=${this.search}&type=album&offset=0&limit=10`;
-
-
-      const options = {
-        method: 'GET',
-        headers: {
-          'X-RapidAPI-Key': `${import.meta.env.VITE_API_KEY}`,
-          'X-RapidAPI-Host': `${import.meta.env.VITE_API_URL}`
-        }
-      };
-
-      try {
-        const response = await fetch(url, options);
-        const result = await response.json();
-        
-        if (result.albums && result.albums.items.length > 0) {
-            this.albumsSearch = result.albums.items.map(item => ({
-              id: item.data.uri,
-              title: item.data.name,
-              artist: item.data.artists.items[0].profile.name,
-              year: item.data.date.year,
-              cover: item.data.coverArt.sources[0].url,
-              esFavorito: this.isFavorite(item.data.uri)
-            }));
-            console.log(this.albumsSearch)
-        } else {
-            this.error = 'No se encontraron álbumes.';
-        }
-      } catch (error) {
-        console.error('Error al buscar álbumes:', error);
-      }
-    }, */
     async getAlbumDetail(id) {
       database = useDBs();
       // console.log(id);
@@ -157,48 +123,19 @@ export const useAlbums = defineStore('albums',{
       }
 
     },
-    async agregarFavorito(id) {
+    async buttonFav(id) {
       database = useDBs();
-      const albumIndex = this.favs.findIndex(item => item.id === id);
-      
+      const albumIndex = database.favs.findIndex(item => item.id === id)
       if (albumIndex > -1) {
-        // Eliminar el album de favoritos
-        this.favs[albumIndex].esFavorito = false;
-        this.favs.splice(albumIndex, 1);
-        localStorage.setItem("favs", JSON.stringify(this.favs));
-        // console.log('Album eliminado de favoritos')
-        
+        await database.deleteData(id, 'favs');
       } else {
-        // Buscar en this.albums y this.exploreAlbums según sea necesario
         let album = this.albums.find(item => item.id === id);
-
         if (!album) {
         album = this.albumsSearch.find(item => item.id === id);
         }
-        
-        if (album) {
-          album.esFavorito = true;
-          this.favs.push(album);
-        }
-        console.log(album)
-        // database.addData(album, 'favs')
+        await database.addData(album, 'favs')
       }
-      localStorage.setItem("favs", JSON.stringify(this.favs));
-      console.log(this.favs)
+    },
 
-      try {
-        await database.addData(this.favs.find(item => item.id === id), 'favs');
-    } catch (error) {
-        console.error('Error al guardar el álbum en favoritos:', error);
-    }
-    
-    },
-    isFavorite(albumId) {
-      return this.favs.some(album => album.id === albumId);
-    },
-    leerFavoritosLocal() {
-      const favsStorage = JSON.parse(localStorage.getItem('favs'));
-      this.favs = favsStorage ? favsStorage : [];
-    }
   }
 })

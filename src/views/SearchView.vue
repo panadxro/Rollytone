@@ -4,14 +4,21 @@ import Albums from '../components/Albums.vue';
 import { ref } from 'vue';
 import { useAlbums } from '@/data/explore';
 import { onMounted } from 'vue';
+import { useDBs } from '@/data/db';
 
 const albumsCatalog = useAlbums();
 const search = ref('');
+const database = useDBs();
 
 const handleSearch = () => {
   albumsCatalog.search = search.value;
   albumsCatalog.getAlbums('busqueda');
 };
+
+onMounted(() => {
+  database.showData('vistos');
+  database.setUpListeners('vistos');
+});
 
 const genres = ['Rock', 'Reggaeton', 'Punk', 'Pop', 'Jazz', 'Metal']
 
@@ -45,7 +52,7 @@ const searchByGenre = (genre) => {
       </Albums>
     </div>
     <div v-else class="flex flex-wrap mt-6 gap-4 albumes">
-      <Albums v-for="album in albumsCatalog.vistosRecientemente" 
+      <Albums v-for="album in database.vistos" 
         :key="album.id" 
         :album="album"
       </Albums>

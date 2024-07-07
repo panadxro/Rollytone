@@ -44,7 +44,8 @@ onMounted(() => {
           </h2>
           <div class="overflow-hidden mb-6">
             <div class="lista-carrito">
-              <Favs v-for="(album, index) in database.favs" :key="album._id" :favs="album"></Favs>
+              <Favs v-for="(album, index) in database.favs" :key="album.id" :favs="album"></Favs>
+              <Favs v-for="(album, index) in albumsCatalog.favs" :key="album.id" :favs="album"></Favs>
             </div>
           </div>
         </div>

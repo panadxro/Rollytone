@@ -26,8 +26,9 @@ const props = defineProps({
         <span class="text-xs text-gray-400">{{ favs?.artist }} {{ favs?.year }}</span>
       </div>
       <div class="absolute right-4 bottom-8 translate-y-4 transition-all duration-500 opacity-0 group-hover:translate-y-4 group-hover:opacity-100 z-10">
-        <button @click="albumsCatalog.agregarFavorito(favs?.id)" type="button" class="card-play-button text-xs font-bold text-white p-4">
-        <i :class="`${props.favs.esFavorito == true}` ? 'fa-solid' : 'fa-regular'" class="fa-heart"></i>
+        <button @click="albumsCatalog.buttonFav(favs?.id)" type="button" class="card-play-button text-xs font-bold text-white p-4">
+        <!-- <i :class="`${props.favs.esFavorito == true}` ? 'fa-solid' : 'fa-regular'" class="fa-heart"></i> -->
+        agregar
         </button>
       </div>
     </div>

@@ -10,12 +10,15 @@ const search = ref('');
 
 const handleSearch = () => {
   albumsCatalog.search = search.value;
-  albumsCatalog.getAlbums();
+  albumsCatalog.getAlbums('busqueda');
 };
 
-onMounted(() => {
-  console.log('Busqueda en proceso')
-});
+const genres = ['Rock', 'Reggaeton', 'Punk', 'Pop', 'Jazz', 'Metal']
+
+const searchByGenre = (genre) => {
+  search.value = genre;
+  handleSearch();
+}
 </script>
 
 <template>
@@ -23,10 +26,26 @@ onMounted(() => {
     <form @submit.prevent="handleSearch">
       <input class="mb-6 py-2 px-6 rounded-full w-80 bg-transparent border-2 text-white inputSearch" id="buscar" type="text" v-model="search" placeholder="Ingresa el título del álbum">
     </form>
+    <div class="mb-4">
+      <button
+        v-for="genre in genres"
+        :key="genre"
+        @click="searchByGenre(genre)"
+        class="mr-2 mb-2 px-4 py-2 rounded-full bg-zinc-800 text-white font-bold hover:bg-zinc-700"
+      >
+        {{ genre }}
+      </button>
+    </div>
     <h1 class="text-xl font-bold text-white">{{ albumsCatalog.search ? 'Resultados' : 'Buscados recientemente' }}</h1>
     <!-- <h1 v-if="error" class="text-xl font-bold text-white">{{ error }}</h1> -->
-    <div class="flex flex-wrap mt-6 gap-4 albumes">
-      <Albums v-for="album in albumsCatalog.albums" 
+    <div v-if="albumsCatalog.search" class="flex flex-wrap mt-6 gap-4 albumes">
+      <Albums v-for="album in albumsCatalog.albumsSearch" 
+        :key="album.id" 
+        :album="album"
+      </Albums>
+    </div>
+    <div v-else class="flex flex-wrap mt-6 gap-4 albumes">
+      <Albums v-for="album in albumsCatalog.vistosRecientemente" 
         :key="album.id" 
         :album="album"
       </Albums>

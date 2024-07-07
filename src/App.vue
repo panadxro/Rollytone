@@ -4,12 +4,16 @@ import { ref } from 'vue';
 import { onMounted } from 'vue';
 
 import { useAlbums } from '@/data/explore';
+// import { useDBs } from '@/data/db';
+
 import Favs from './components/Favs.vue';
 
+// const database = useDBs();
 const albumsCatalog = useAlbums();
 
 onMounted(() => {
-  albumsCatalog.getAlbums();
+  albumsCatalog.getAlbums('explore');
+  // albumsCatalog.leerFavoritosLocal();
 });
 </script>
 
@@ -37,19 +41,10 @@ onMounted(() => {
           <h2 class="flex gap-4 text-zinc-400 hover:text-zinc-100 items-center py-3 px-5 font-medium transition duration-300">
             <i class="fa-solid fa-bookmark"></i><span class="hidden sm:inline">Mis favoritos</span>
           </h2>
-          <div class="lista-carrito overflow-y-auto pb-6">
-            <Favs v-for="(album, index) in albumsCatalog.favs" :key="album.id" :favs="album"></Favs>
-<!--             <favs 
-              v-for="(album, index) in favs"
-              :key="album.id"
-              :id="album.id"
-              :titulo="album.title"
-              :artista="album.artist"
-              :anio="album.year"
-              :portada="album.cover"
-              :es-favorito="isFav(album.id)"
-              @agregar="agregarFavorito(album.id)"
-            ></favs> -->
+          <div class="overflow-hidden mb-6">
+            <div class="lista-carrito">
+              <Favs v-for="(album, index) in albumsCatalog.favs" :key="album.id" :favs="album"></Favs>
+            </div>
           </div>
         </div>
       </nav>
@@ -58,10 +53,6 @@ onMounted(() => {
     <main class="[grid-area:main] rounded-lg bg-zinc-900 overflow-y-auto pb-6">
       <router-view></router-view>
     </main>
-    
-<!--     <footer class="[grid-area:player] min-h-[25px] text-white text-center">
-      <p>DV | Progresive Web Applications | Panadero Lucas</p>
-    </footer> -->
   </div>
 </template>
 
@@ -92,9 +83,9 @@ onMounted(() => {
 } */
 
 .lista-carrito {
-  overflow-y: auto;
-  max-height: 65%;
-  padding-bottom: 20rem;
+  overflow-y: scroll;
+  max-height: 22rem;
+  /* padding-bottom: 20rem; */
 }
 .active {
   color:#fff !important;

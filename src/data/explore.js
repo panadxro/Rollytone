@@ -1,9 +1,6 @@
 import { defineStore } from 'pinia';
-import { useLoading } from '@/data/loading';
 import { useDBs } from '@/data/db';
 
-
-let loading = null;
 let database = null;
 
 export const useAlbums = defineStore('albums',{
@@ -18,11 +15,6 @@ export const useAlbums = defineStore('albums',{
       error: ''
     };
   },  
-/*   getters: {
-    isFavorite: (state) => (id) => {
-      return state.favs.some(album => album.id === id);
-    }
-  }, */
   actions: {
     async loadExploreAlbums() {
       // Intentar obtener los datos desde localStorage
@@ -36,11 +28,9 @@ export const useAlbums = defineStore('albums',{
     },
     async getAlbums(catalog) {
       database = useDBs();
-      loading = useLoading();
-      loading.loading.albums = false;
       // this.albums = [];
 
-      let url = `https://${import.meta.env.VITE_API_URL}/search/?q=lofi&type=album&offset=0&limit=20`;
+      let url = `https://${import.meta.env.VITE_API_URL}/search/?q=rock&type=album&offset=0&limit=20`;
       if (catalog === 'busqueda') {
         url = `https://${import.meta.env.VITE_API_URL}/search/?q=${this.search}&type=album&offset=0&limit=10`;
       }
@@ -56,7 +46,6 @@ export const useAlbums = defineStore('albums',{
         const response = await fetch(url, options);
         const result = await response.json();
         // this.albums = result.albums;
-        // loading.loading.albums = true;
         if (result.albums && result.albums.items.length > 0) {
             const loadAlbums = result.albums.items.map(item => ({
               id: item.data.uri,
@@ -66,13 +55,12 @@ export const useAlbums = defineStore('albums',{
               cover: item.data.coverArt.sources[0].url,
               esFavorito: database.favs.some(album => album.id === item.data.uri),
             }));
-            console.log(loadAlbums)
+            // console.log(loadAlbums)
             if(catalog === 'busqueda') {
               this.albumsSearch = loadAlbums;
             } else if (catalog === 'explore') {
               this.albums = loadAlbums;
               localStorage.setItem("albums", JSON.stringify(this.albums));
-              console.log('Datos almacenados en localStorage')
             }
         } else {
             this.error = 'No se encontraron álbumes.';
@@ -84,8 +72,6 @@ export const useAlbums = defineStore('albums',{
     async getAlbumDetail(id) {
       database = useDBs();
       // console.log(id);
-      loading = useLoading();
-      loading.loading.albumDetail = false;
 
       let url = `https://${import.meta.env.VITE_API_URL}/albums/?ids=${id}`;
       const options = {
@@ -111,12 +97,11 @@ export const useAlbums = defineStore('albums',{
             duration: track.duration_ms
           })),
         }));
-        console.log(this.albumDetail)
+        // console.log(this.albumDetail)
         this.vistosRecientemente.push(this.albumDetail[0])
         localStorage.setItem("vistosRecientemente", JSON.stringify(this.vistosRecientemente));
         database.addData(this.albumDetail[0], 'visto')
         // console.log(this.vistosRecientemente)
-        loading.loading.albumDetail = true;
       } catch (error) {
         console.error('Error al obtener el detalle del album', error);
       }

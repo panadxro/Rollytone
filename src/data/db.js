@@ -1,6 +1,5 @@
 import { defineStore } from 'pinia';
 
-// const PouchDB = require('pouchdb');
 const favsdb = new PouchDB('favsDB')
 const vistosdb = new PouchDB('vistosDB')
 

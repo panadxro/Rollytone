@@ -43,7 +43,7 @@ onMounted(() => {
             <i class="fa-solid fa-bookmark"></i><span class="hidden sm:inline">Mis favoritos</span>
           </h2>
           <div class="overflow-hidden mb-6">
-            <div class="lista-carrito">
+            <div class="lista-favoritos">
               <Favs v-for="(album, index) in database.favs" :key="album.id" :favs="album"></Favs>
               <Favs v-for="(album, index) in albumsCatalog.favs" :key="album.id" :favs="album"></Favs>
             </div>
@@ -84,7 +84,7 @@ onMounted(() => {
   max-height: 80%;
 } */
 
-.lista-carrito {
+.lista-favoritos {
   overflow-y: scroll;
   max-height: 22rem;
   /* padding-bottom: 20rem; */
@@ -106,75 +106,17 @@ main::-webkit-scrollbar-thumb {
 main::-webkit-scrollbar-thumb:hover {
   background-color: #555; 
 }
-.lista-carrito::-webkit-scrollbar {
+.lista-favoritos::-webkit-scrollbar {
   width: 12px;
 }
-.lista-carrito::-webkit-scrollbar-track {
+.lista-favoritos::-webkit-scrollbar-track {
   background-color: rgba(0, 0, 0, 0);
 }
-.lista-carrito::-webkit-scrollbar-thumb {
+.lista-favoritos::-webkit-scrollbar-thumb {
   background-color: rgba(255, 255, 255, .1);
   border-radius: 1rem;
 }
-.lista-carrito::-webkit-scrollbar-thumb:hover {
+.lista-favoritos::-webkit-scrollbar-thumb:hover {
   background-color: #555; 
 }
 </style>
-<!-- <script>
-import SearchView from './views/SearchView.vue';
-
-export default {
-  data() {
-    return {
-      favs: [],
-      albums: [],
-      exploreAlbums: [],
-      error: ''
-    };
-  },
-  created() {
-    this.leerFavoritosLocal();
-  },
-  methods: {
-    leerFavoritosLocal() {
-      const favsStorage = JSON.parse(localStorage.getItem('favs'));
-      this.favs = favsStorage ? favsStorage : [];
-    },
-    guardarFavs() {
-      localStorage.setItem('favs', JSON.stringify(this.favs));
-    },
-    isFav(albumId) {
-      return this.favs.some(album => album.id === albumId);
-    },
-    async agregarFavorito(id) {
-      console.log('intentando agregar a favs')
-      const albumIndex = this.favs.findIndex(item => item.id === id);
-      
-      if (albumIndex > -1) {
-        this.favs.splice(albumIndex, 1);
-      } else {
-        // Buscar en this.albums y this.exploreAlbums según sea necesario
-        let album = this.albums.find(item => item.id === id);
-        if (!album) {
-        album = this.exploreAlbums.find(item => item.id === id);
-        }
-        
-        if (album) {
-          this.favs.push(album);
-        } else {
-          console.error('El álbum no se encontró en ninguna lista.');
-        }
-      }
-      
-      // Guardar los favoritos actualizados en localStorage
-      this.guardarFavs();
-      console.log('Después de agregar/quitar a favs:', this.favs);
-    },
-  },
-  components: {
-    Favs,
-    ExploreView,
-    SearchView,
-  }
-};
-</script> -->

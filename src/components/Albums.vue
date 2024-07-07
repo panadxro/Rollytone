@@ -1,12 +1,8 @@
 <script setup>
-import { ref, watch } from 'vue';
-
 import { RouterLink } from 'vue-router';
 import { useAlbums } from '@/data/explore';
-import { useDBs } from '@/data/db';
 
 const albumsCatalog = useAlbums();
-const database = useDBs();
 
 const props = defineProps({
   album: {
@@ -15,23 +11,11 @@ const props = defineProps({
   }
 })
 
-// const esFavorito = ref(albumsCatalog.isFavorite(props.album.id));
-
-/* watch(
-  () => props.album.id,
-  (newId) => {
-    esFavorito.value = albumsCatalog.isFavorite(newId);
-  }
-); */
-
 const toggleFavorito = async () => {
   await albumsCatalog.buttonFav(props.album.id);
   albumsCatalog.isFavorite(props.album.id)
-
 };
-
 </script>
-
 
 <template>
   <article class="group relative">
@@ -53,23 +37,3 @@ const toggleFavorito = async () => {
     </a>
   </article>
 </template>
-
-<!-- <script>
- export default {
-  props: {
-    
-    id: String,
-    titulo: String,
-    artista: String,
-    anio: Number,
-    portada: String,
-    esFavorito: Boolean
-  },
-  methods: {
-    addFav() {
-      this.$emit('agregar', this.id);
-    }
-  }
-}
-</script> -->
-

@@ -1,36 +1,25 @@
 <script setup>
 import { watch } from 'vue';
-// import { onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 
 import { useAlbums } from '@/data/explore';
-// import { useDBs } from '@/data/db';
 
-// import { useLoading } from '@/data/loading';
-// const database = useDBs();
 const albumsCatalog = useAlbums();
-// const loading = useLoading();
 const route = useRoute();
 
 albumsCatalog.getAlbumDetail(route.params.id);
-
-/* watch(() => albumsCatalog.albumDetail, (newVal) => {
-  console.log('Album detallado:', newVal)
-}) */
-/* onMounted(() => {
-  database.addVisto('chau')
-});
- */
+const toggleFavorito = async () => {
+  await albumsCatalog.buttonFav(albumsCatalog.albumDetail[0].id)
+  albumsCatalog.isFavorite(albumsCatalog.albumDetail[0].id)
+};
 </script>
 
 <template>
-<!--     <div v-if="!loading.loading.albumDetail">
-        <Loading />
-    </div> -->
     <article class="group relative flex flex-col lg:flex-row lg:items-center" v-if="albumsCatalog.albumDetail[0]">
     <div class="absolute left-28 top-2 translate-y-20 transition-all duration-500 opacity-0 group-hover:translate-y-28 group-hover:opacity-100 z-10 bg-zinc-800 rounded-full aspect-square">
-      <button @click="albumsCatalog.addFav(albumsCatalog.albumDetail[0].id)" type="button" class="card-play-button text-xs font-bold text-white p-4">
-        <i :class="esFavorito ? 'fa-solid' : 'fa-regular'" class="fa-heart fa-xl"></i>
+      <button @click="toggleFavorito" type="button" class="card-play-button text-xs font-bold text-white p-4">
+        <!-- <i :class="esFavorito ? 'fa-solid' : 'fa-regular'" class="fa-heart fa-xl"></i> -->
+        <i :class="albumsCatalog.isFavorite(albumsCatalog.albumDetail[0].id) ? 'fa-solid' : 'fa-regular'" class="fa-heart"></i>
       </button>
     </div>
     <picture class="w-full h-auto flex-none lg:w-1/3">
